@@ -53,7 +53,7 @@ st.markdown("""
         border-radius: 10px; padding: 12px 16px; text-align: center;
     }
     .metric-val { font-size: 1.5rem; font-weight: bold; font-family: monospace; }
-    .metric-lbl { font-size: 0.72rem; color: #2d6a4f; margin-top: 3px; }
+    .metric-lbl { font-size: 0.72rem; color: #ffffff; margin-top: 3px; }
 
     .err-box {
         background: #fff0f0; border: 1px solid #ff4d4d;
