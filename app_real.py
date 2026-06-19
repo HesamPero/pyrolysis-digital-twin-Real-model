@@ -445,11 +445,12 @@ def chart_mass_sankey(r):
         ),
     ))
     fig.update_layout(
-        **LAYOUT_BASE,
+        paper_bgcolor='#ffffff',
+        plot_bgcolor='#ffffff',
+        font=dict(color='#000000', size=13, family='monospace'),
         title=dict(text='⚖️  Mass Balance — per 1 kg Biomass',
                    font=dict(size=14, color='#1b5e20'), x=0.5, xanchor='center'),
         height=340, margin=dict(l=10, r=10, t=50, b=10),
-        font=dict(color='#000000', size=13, family='monospace'),
     )
     return fig
 
@@ -563,11 +564,12 @@ def chart_energy_sankey(r):
         ),
     ))
     fig.update_layout(
-        **LAYOUT_BASE,
+        paper_bgcolor='#ffffff',
+        plot_bgcolor='#ffffff',
+        font=dict(color='#000000', size=13, family='monospace'),
         title=dict(text='⚡  Energy Balance — MJ per kg Biomass',
                    font=dict(size=14, color='#c9722b'), x=0.5, xanchor='center'),
         height=420, margin=dict(l=20, r=20, t=60, b=20),
-        font=dict(color='#000000', size=13, family='monospace'),
     )
     return fig
 
