@@ -299,13 +299,16 @@ def run_model(cel_pct, hemi_pct, lig_pct, ash_pct, HTT):
           + 1.8422012948*cn*cn + 1.8780691224*ln*ln
           - 68.654788896*an*an)
 
-    # I33–I38 are the vol% directly from the JMP model regressions
-    vol_pct_list = [I33, I34, I35, I36, I37, I38]
+    # I33–I38 are already vol% — just normalise to sum to 100%
+    raw_vol = [I33, I34, I35, I36, I37, I38]
+    vol_sum = sum(raw_vol)
+    vol_pct = [v / vol_sum * 100 for v in raw_vol]
+
+    # wt% from vol% × molar mass, then normalise
     MM = [MOLAR_MASS[s] for s in GAS_SPECIES]
-    wt_raw  = [v * m for v, m in zip(vol_pct_list, MM)]
+    wt_raw  = [v * m for v, m in zip(vol_pct, MM)]
     wt_sum  = sum(wt_raw)
     wt_pct  = [w / wt_sum * 100 for w in wt_raw]
-    vol_pct = list(vol_pct_list)
     gas_yields = [I18 * w / 100 for w in wt_pct]
 
     # ── ENERGY BALANCE ────────────────────────────────────────────────────
