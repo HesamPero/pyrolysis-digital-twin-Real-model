@@ -29,7 +29,7 @@ st.set_page_config(
 # ──────────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    .stApp { background-color: #ffffff; color: #1a1a1a; }
+    .stApp { background-color: #5F9EA0; color: #1a1a1a; }
     [data-testid="stSidebar"] {
         background-color: #f0f7f0;
         border-right: 1px solid #4a7c59;
