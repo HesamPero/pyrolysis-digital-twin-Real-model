@@ -585,57 +585,20 @@ def chart_energy_sankey(r):
 with st.sidebar:
     st.markdown("## ⚙️ Input Parameters")
     st.markdown("---")
+    st.markdown("**Biochemical Composition [%]**")
 
-    # ── Mode toggle ───────────────────────────────────────────────────────────
-    mode = st.radio(
-        "Mode",
-        ["Single", "Comparison"],
-        horizontal=True,
-    )
+    cel  = st.slider("🌿 Cellulose",     20.0, 60.0, 54.2, 0.1)
+    hemi = st.slider("🍂 Hemicellulose",  5.0, 35.0,  9.4, 0.1)
+    lig  = st.slider("🪵 Lignin",         5.0, 60.0, 23.2, 0.1)
+    ash  = st.slider("⚪ Ash",            0.0, 10.0,  0.4, 0.1)
 
-    st.markdown("---")
+    total = cel + hemi + lig + ash
+    oth   = 100.0 - total
 
-    if mode == "Single":
-        st.markdown("**Biochemical Composition [%]**")
-        cel  = st.slider("🌿 Cellulose",     20.0, 60.0, 54.2, 0.1)
-        hemi = st.slider("🍂 Hemicellulose",  5.0, 35.0,  9.4, 0.1)
-        lig  = st.slider("🪵 Lignin",         5.0, 60.0, 23.2, 0.1)
-        ash  = st.slider("⚪ Ash",            0.0, 10.0,  0.4, 0.1)
-        total = cel + hemi + lig + ash
-        oth   = 100.0 - total
-        if oth >= 0:
-            st.success(f"✅ Others: **{oth:.1f}%** | Total: **{total:.1f}%**")
-        else:
-            st.error(f"❌ Exceeds 100% by **{-oth:.1f}%**")
-
+    if oth >= 0:
+        st.success(f"✅ Others: **{oth:.1f}%** | Total: **{total:.1f}%**")
     else:
-        # ── Composition A ─────────────────────────────────────────────────────
-        st.markdown("**🔵 Composition A**")
-        cel_a  = st.slider("🌿 Cellulose A",     20.0, 60.0, 54.2, 0.1)
-        hemi_a = st.slider("🍂 Hemicellulose A",  5.0, 35.0,  9.4, 0.1)
-        lig_a  = st.slider("🪵 Lignin A",         5.0, 60.0, 23.2, 0.1)
-        ash_a  = st.slider("⚪ Ash A",            0.0, 10.0,  0.4, 0.1)
-        total_a = cel_a + hemi_a + lig_a + ash_a
-        oth_a   = 100.0 - total_a
-        if oth_a >= 0:
-            st.success(f"✅ Others A: **{oth_a:.1f}%**")
-        else:
-            st.error(f"❌ A exceeds 100% by **{-oth_a:.1f}%**")
-
-        st.markdown("---")
-
-        # ── Composition B ─────────────────────────────────────────────────────
-        st.markdown("**🔴 Composition B**")
-        cel_b  = st.slider("🌿 Cellulose B",     20.0, 60.0, 38.0, 0.1)
-        hemi_b = st.slider("🍂 Hemicellulose B",  5.0, 35.0, 29.0, 0.1)
-        lig_b  = st.slider("🪵 Lignin B",         5.0, 60.0, 15.0, 0.1)
-        ash_b  = st.slider("⚪ Ash B",            0.0, 10.0,  7.0, 0.1)
-        total_b = cel_b + hemi_b + lig_b + ash_b
-        oth_b   = 100.0 - total_b
-        if oth_b >= 0:
-            st.success(f"✅ Others B: **{oth_b:.1f}%**")
-        else:
-            st.error(f"❌ B exceeds 100% by **{-oth_b:.1f}%**")
+        st.error(f"❌ Exceeds 100% by **{-oth:.1f}%**")
 
     st.markdown("---")
     st.markdown(
@@ -658,220 +621,92 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  SINGLE MODE
-# ══════════════════════════════════════════════════════════════════════════════
-if mode == "Single":
-
-    if oth < 0:
-        st.markdown(
-            f'<div class="err-box">⚠️ Component sum exceeds 100% by {-oth:.1f}%. '
-            f'Please reduce Cellulose, Hemicellulose, Lignin, or Ash.</div>',
-            unsafe_allow_html=True,
-        )
-        st.stop()
-
-    r = run_model(cel, hemi, lig, ash)
-
-    # Quick summary
+# Guard
+if oth < 0:
     st.markdown(
-        f'<div class="info-box">📋 <b>Quick Summary</b> &nbsp;|&nbsp; '
-        f'Biochar: <b>{r["biochar_yield"]:.2f}%</b> &nbsp;'
-        f'Tar: <b>{r["tar_yield"]:.2f}%</b> &nbsp;'
-        f'Aqueous: <b>{r["aqueous_yield"]:.2f}%</b> &nbsp;'
-        f'Gas: <b>{r["gas_yield"]:.2f}%</b> &nbsp;|&nbsp; '
-        f'Biochar LHV: <b>{r["bc_LHV"]:.0f} J/g</b> &nbsp;'
-        f'Biomass LHV: <b>{r["bm_LHV"]:.0f} J/g</b></div>',
+        f'<div class="err-box">⚠️ Component sum exceeds 100% by {-oth:.1f}%. '
+        f'Please reduce Cellulose, Hemicellulose, Lignin, or Ash.</div>',
+        unsafe_allow_html=True,
+    )
+    st.stop()
+
+# Run model
+r = run_model(cel, hemi, lig, ash)
+
+# Quick summary
+st.markdown(
+    f'<div class="info-box">📋 <b>Quick Summary</b> &nbsp;|&nbsp; '
+    f'Biochar: <b>{r["biochar_yield"]:.2f}%</b> &nbsp;'
+    f'Tar: <b>{r["tar_yield"]:.2f}%</b> &nbsp;'
+    f'Aqueous: <b>{r["aqueous_yield"]:.2f}%</b> &nbsp;'
+    f'Gas: <b>{r["gas_yield"]:.2f}%</b> &nbsp;|&nbsp; '
+    f'Biochar LHV: <b>{r["bc_LHV"]:.0f} J/g</b> &nbsp;'
+    f'Biomass LHV: <b>{r["bm_LHV"]:.0f} J/g</b></div>',
+    unsafe_allow_html=True,
+)
+
+# Metric cards
+st.markdown('<div class="sec-hdr">📋 PRODUCT YIELD SUMMARY</div>', unsafe_allow_html=True)
+c1, c2, c3, c4 = st.columns(4)
+cards = [
+    (c1, f"{r['biochar_yield']:.2f}%", "Biochar Yield",  "#3a3a5e", "#a8a8e8"),
+    (c2, f"{r['tar_yield']:.2f}%",     "Tar Yield",      "#3a1a0a", "#e8a87c"),
+    (c3, f"{r['aqueous_yield']:.2f}%", "Aqueous Yield",  "#0a1a3a", "#7cb8e8"),
+    (c4, f"{r['gas_yield']:.2f}%",     "Gas Yield",      "#3a3a0a", "#e8d87c"),
+]
+for col, val, lbl, bg, fg in cards:
+    col.markdown(
+        f'<div class="metric-card" style="background:{bg};">'
+        f'<div class="metric-val" style="color:{fg};">{val}</div>'
+        f'<div class="metric-lbl">{lbl}</div></div>',
         unsafe_allow_html=True,
     )
 
-    # Metric cards
-    st.markdown('<div class="sec-hdr">📋 PRODUCT YIELD SUMMARY</div>', unsafe_allow_html=True)
-    c1, c2, c3, c4 = st.columns(4)
-    cards = [
-        (c1, f"{r['biochar_yield']:.2f}%", "Biochar Yield",  "#3a3a5e", "#a8a8e8"),
-        (c2, f"{r['tar_yield']:.2f}%",     "Tar Yield",      "#3a1a0a", "#e8a87c"),
-        (c3, f"{r['aqueous_yield']:.2f}%", "Aqueous Yield",  "#0a1a3a", "#7cb8e8"),
-        (c4, f"{r['gas_yield']:.2f}%",     "Gas Yield",      "#3a3a0a", "#e8d87c"),
-    ]
-    for col, val, lbl, bg, fg in cards:
-        col.markdown(
-            f'<div class="metric-card" style="background:{bg};">'
-            f'<div class="metric-val" style="color:{fg};">{val}</div>'
-            f'<div class="metric-lbl">{lbl}</div></div>',
-            unsafe_allow_html=True,
-        )
+st.markdown("<br>", unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.plotly_chart(chart_yield_bar(r), use_container_width=True, key="bar")
+# Yield bar
+st.plotly_chart(chart_yield_bar(r), use_container_width=True, key="bar")
 
-    st.markdown('<div class="sec-hdr">⚖️ MASS BALANCE</div>', unsafe_allow_html=True)
-    col_pie, col_sankey = st.columns([1, 1.6])
-    with col_pie:
-        st.plotly_chart(chart_biomass_pie(r), use_container_width=True, key="bm_pie")
-    with col_sankey:
-        st.plotly_chart(chart_mass_sankey(r), use_container_width=True, key="sankey")
+# Biomass pie + Mass Sankey
+st.markdown('<div class="sec-hdr">⚖️ MASS BALANCE</div>', unsafe_allow_html=True)
+col_pie, col_sankey = st.columns([1, 1.6])
+with col_pie:
+    st.plotly_chart(chart_biomass_pie(r), use_container_width=True, key="bm_pie")
+with col_sankey:
+    st.plotly_chart(chart_mass_sankey(r), use_container_width=True, key="sankey")
 
-    st.markdown('<div class="sec-hdr">🔬 GAS PHASE COMPOSITION</div>', unsafe_allow_html=True)
-    st.plotly_chart(chart_gas_pies(r), use_container_width=True, key="gas")
+# Gas pies
+st.markdown('<div class="sec-hdr">🔬 GAS PHASE COMPOSITION</div>', unsafe_allow_html=True)
+st.plotly_chart(chart_gas_pies(r), use_container_width=True, key="gas")
 
-    st.markdown('<div class="sec-hdr">⚡ ENERGY BALANCE</div>', unsafe_allow_html=True)
-    st.plotly_chart(chart_energy_sankey(r), use_container_width=True, key="energy")
+# Energy Sankey
+st.markdown('<div class="sec-hdr">⚡ ENERGY BALANCE</div>', unsafe_allow_html=True)
+st.plotly_chart(chart_energy_sankey(r), use_container_width=True, key="energy")
 
-    st.markdown('<div class="sec-hdr">📋 ENERGY SUMMARY TABLE</div>', unsafe_allow_html=True)
-    e1, e2 = st.columns(2)
-    with e1:
-        st.markdown(f"""
-    | Input | Value |
-    |-------|-------|
-    | Biomass LHV | `{r['bm_LHV']:.2f} J/g` |
-    | Biomass Chemical Energy | `{r['bm_energy']:.4f} MJ/kg` |
-    | Electrical Heating Input | `{r['elec_input']:.4f} MJ/kg` |
-    | **Total Input** | **`{r['bm_energy']+r['elec_input']:.4f} MJ/kg`** |
-        """)
-    with e2:
-        st.markdown(f"""
-    | Output | Value |
-    |--------|-------|
-    | Biochar Chemical Energy | `{r['bc_energy']:.4f} MJ/kg` |
-    | Tar Chemical Energy | `{r['tar_energy']:.4f} MJ/kg` |
-    | Gas (Chem + Sensible) | `{r['gas_chem']+r['gas_sens']:.4f} MJ/kg` |
-    | Aqueous (Cond + Sensible) | `{r['aq_cond']+r['aq_sens']:.4f} MJ/kg` |
-    | Non-recovered Losses | `{r['losses']:.4f} MJ/kg` |
-        """)
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  COMPARISON MODE
-# ══════════════════════════════════════════════════════════════════════════════
-else:
-    # Guard both
-    if oth_a < 0:
-        st.markdown(
-            f'<div class="err-box">⚠️ Composition A exceeds 100% by {-oth_a:.1f}%.</div>',
-            unsafe_allow_html=True,
-        )
-        st.stop()
-    if oth_b < 0:
-        st.markdown(
-            f'<div class="err-box">⚠️ Composition B exceeds 100% by {-oth_b:.1f}%.</div>',
-            unsafe_allow_html=True,
-        )
-        st.stop()
-
-    # Run both models — same function, same physics, just different inputs
-    rA = run_model(cel_a, hemi_a, lig_a, ash_a)
-    rB = run_model(cel_b, hemi_b, lig_b, ash_b)
-
-    # ── Comparison headers ────────────────────────────────────────────────────
-    col_a, col_b = st.columns(2)
-    with col_a:
-        st.markdown(
-            f'<div class="info-box">🔵 <b>Composition A</b> &nbsp;|&nbsp; '
-            f'HTT: <b>{HTT_a}°C</b><br>'
-            f'Cel: {cel_a}% · Hemi: {hemi_a}% · Lig: {lig_a}% · Ash: {ash_a}% · Others: {oth_a:.1f}%'
-            f'</div>', unsafe_allow_html=True)
-    with col_b:
-        st.markdown(
-            f'<div class="info-box" style="border-color:#c9722b;color:#7a2a0a;">🔴 <b>Composition B</b> &nbsp;|&nbsp; '
-            f'HTT: <b>{HTT_b}°C</b><br>'
-            f'Cel: {cel_b}% · Hemi: {hemi_b}% · Lig: {lig_b}% · Ash: {ash_b}% · Others: {oth_b:.1f}%'
-            f'</div>', unsafe_allow_html=True)
-
-    # ── Metric cards comparison ───────────────────────────────────────────────
-    st.markdown('<div class="sec-hdr">📋 PRODUCT YIELD COMPARISON</div>', unsafe_allow_html=True)
-
-    c1, c2, c3, c4 = st.columns(4)
-    comp_cards = [
-        (c1, "Biochar", rA['biochar_yield'], rB['biochar_yield'], "#3a3a5e", "#a8a8e8"),
-        (c2, "Tar",     rA['tar_yield'],     rB['tar_yield'],     "#3a1a0a", "#e8a87c"),
-        (c3, "Aqueous", rA['aqueous_yield'], rB['aqueous_yield'], "#0a1a3a", "#7cb8e8"),
-        (c4, "Gas",     rA['gas_yield'],     rB['gas_yield'],     "#3a3a0a", "#e8d87c"),
-    ]
-    for col, lbl, va, vb, bg, fg in comp_cards:
-        diff = vb - va
-        arrow = "▲" if diff > 0 else "▼"
-        color = "#2ecc71" if diff > 0 else "#e74c3c"
-        col.markdown(
-            f'<div class="metric-card" style="background:{bg};">'
-            f'<div class="metric-val" style="color:{fg};">{lbl}</div>'
-            f'<div style="font-family:monospace;font-size:0.9rem;color:#a8d8a8;margin-top:6px;">🔵 {va:.2f}%</div>'
-            f'<div style="font-family:monospace;font-size:0.9rem;color:#e8a87c;">🔴 {vb:.2f}%</div>'
-            f'<div style="font-family:monospace;font-size:0.85rem;color:{color};margin-top:4px;">'
-            f'{arrow} {abs(diff):.2f}%</div>'
-            f'</div>',
-            unsafe_allow_html=True,
-        )
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # ── Yield bar comparison ──────────────────────────────────────────────────
-    names  = ['Biochar', 'Tar', 'Aqueous', 'Gas']
-    vals_a = [rA['biochar_yield'], rA['tar_yield'], rA['aqueous_yield'], rA['gas_yield']]
-    vals_b = [rB['biochar_yield'], rB['tar_yield'], rB['aqueous_yield'], rB['gas_yield']]
-
-    fig_cmp = go.Figure()
-    fig_cmp.add_trace(go.Bar(
-        name='🔵 Composition A', y=names, x=vals_a,
-        orientation='h', marker_color='#4a7c59',
-        text=[f'{v:.2f}%' for v in vals_a], textposition='outside',
-    ))
-    fig_cmp.add_trace(go.Bar(
-        name='🔴 Composition B', y=names, x=vals_b,
-        orientation='h', marker_color='#c9722b',
-        text=[f'{v:.2f}%' for v in vals_b], textposition='outside',
-    ))
-    fig_cmp.update_layout(
-        paper_bgcolor='#ffffff', plot_bgcolor='#ffffff',
-        font=dict(color='#1a1a1a', family='monospace', size=12),
-        barmode='group',
-        title=dict(text='📊  Product Yield Comparison',
-                   font=dict(size=14, color='#1b5e20'), x=0.5, xanchor='center'),
-        xaxis=dict(title='Yield [%]', gridcolor='#e0e0e0', range=[0, 115]),
-        yaxis=dict(gridcolor='#e0e0e0'),
-        height=280, margin=dict(l=20, r=20, t=50, b=20),
-        legend=dict(bgcolor='rgba(0,0,0,0)'),
-    )
-    st.plotly_chart(fig_cmp, use_container_width=True, key="cmp_bar")
-
-    # ── Mass Sankey comparison ────────────────────────────────────────────────
-    st.markdown('<div class="sec-hdr">⚖️ MASS BALANCE COMPARISON</div>', unsafe_allow_html=True)
-    col_sa, col_sb = st.columns(2)
-    with col_sa:
-        st.markdown("**🔵 Composition A**")
-        st.plotly_chart(chart_mass_sankey(rA), use_container_width=True, key="sankey_a")
-    with col_sb:
-        st.markdown("**🔴 Composition B**")
-        st.plotly_chart(chart_mass_sankey(rB), use_container_width=True, key="sankey_b")
-
-    # ── Energy comparison table ───────────────────────────────────────────────
-    st.markdown('<div class="sec-hdr">⚡ ENERGY BALANCE COMPARISON</div>', unsafe_allow_html=True)
-    col_ea, col_eb = st.columns(2)
-    with col_ea:
-        st.markdown("**🔵 Composition A**")
-        st.markdown(f"""
+# Energy summary table
+st.markdown('<div class="sec-hdr">📋 ENERGY SUMMARY TABLE</div>', unsafe_allow_html=True)
+e1, e2 = st.columns(2)
+with e1:
+    st.markdown(f"""
+| Input | Value |
+|-------|-------|
+| Biomass LHV | `{r['bm_LHV']:.2f} J/g` |
+| Biomass Chemical Energy | `{r['bm_energy']:.4f} MJ/kg` |
+| Electrical Heating Input | `{r['elec_input']:.4f} MJ/kg` |
+| **Total Input** | **`{r['bm_energy']+r['elec_input']:.4f} MJ/kg`** |
+    """)
+with e2:
+    st.markdown(f"""
 | Output | Value |
 |--------|-------|
-| Biomass LHV | `{rA['bm_LHV']:.2f} J/g` |
-| Biochar Energy | `{rA['bc_energy']:.4f} MJ/kg` |
-| Tar Energy | `{rA['tar_energy']:.4f} MJ/kg` |
-| Gas Energy | `{rA['gas_chem']+rA['gas_sens']:.4f} MJ/kg` |
-| Aqueous Energy | `{rA['aq_cond']+rA['aq_sens']:.4f} MJ/kg` |
-| Losses | `{rA['losses']:.4f} MJ/kg` |
-        """)
-    with col_eb:
-        st.markdown("**🔴 Composition B**")
-        st.markdown(f"""
-| Output | Value |
-|--------|-------|
-| Biomass LHV | `{rB['bm_LHV']:.2f} J/g` |
-| Biochar Energy | `{rB['bc_energy']:.4f} MJ/kg` |
-| Tar Energy | `{rB['tar_energy']:.4f} MJ/kg` |
-| Gas Energy | `{rB['gas_chem']+rB['gas_sens']:.4f} MJ/kg` |
-| Aqueous Energy | `{rB['aq_cond']+rB['aq_sens']:.4f} MJ/kg` |
-| Losses | `{rB['losses']:.4f} MJ/kg` |
-        """)
+| Biochar Chemical Energy | `{r['bc_energy']:.4f} MJ/kg` |
+| Tar Chemical Energy | `{r['tar_energy']:.4f} MJ/kg` |
+| Gas (Chem + Sensible) | `{r['gas_chem']+r['gas_sens']:.4f} MJ/kg` |
+| Aqueous (Cond + Sensible) | `{r['aq_cond']+r['aq_sens']:.4f} MJ/kg` |
+| Non-recovered Losses | `{r['losses']:.4f} MJ/kg` |
+    """)
 
-# ── Footer ────────────────────────────────────────────────────────────────────
+# Footer
 st.markdown("---")
 st.markdown(
     "<div style='text-align:center;font-family:monospace;font-size:0.75rem;"
