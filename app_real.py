@@ -471,9 +471,9 @@ def chart_yield_bar(r):
     ))
     fig.update_layout(
         **LAYOUT_BASE,
-        xaxis=dict(title='Yield [%]', gridcolor=CLR['grid'], range=[0, 108]),
+        xaxis=dict(title='Yield [wt%]', gridcolor=CLR['grid'], range=[0, 108]),
         yaxis=dict(gridcolor=CLR['grid']),
-        title=dict(text='📊  Product Yield Overview',
+        title=dict(text='📊  Mass Balance',
                    font=dict(size=14, color=CLR['text']), x=0.5, xanchor='center'),
         height=250, margin=dict(l=20, r=20, t=50, b=20),
         showlegend=False,
