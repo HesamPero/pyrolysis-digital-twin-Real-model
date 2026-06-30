@@ -401,10 +401,8 @@ def chart_biomass_pie(r):
                     orientation='v', x=1.0, y=0.5),
     )
     return fig
-
-
 def chart_mass_sankey(r):
-labels = [
+    labels = [
         'Biomass\n1.00 kg', 'Reactor',
         f'Biochar\n{r["biochar_yield"]/100:.2f} kg ({r["biochar_yield"]:.2f}%)',
         f'Tar\n{r["tar_yield"]/100:.2f} kg ({r["tar_yield"]:.2f}%)',
