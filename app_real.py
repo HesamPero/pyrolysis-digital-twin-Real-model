@@ -582,7 +582,7 @@ def chart_energy_sankey(r):
 with st.sidebar:
     st.markdown("## ⚙️ Input Parameters")
     st.markdown("---")
-    st.markdown("**Biochemical Composition [%]**")
+    st.markdown("**Biomass Composition [wt%]**")
 
     cel  = st.slider("🌿 Cellulose",     20.0, 60.0, 54.2, 0.1)
     hemi = st.slider("🍂 Hemicellulose",  5.0, 35.0,  9.4, 0.1)
@@ -593,7 +593,7 @@ with st.sidebar:
     oth   = 100.0 - total
 
     if oth >= 0:
-        st.success(f"✅ Others: **{oth:.1f}%** | Total: **{total:.1f}%**")
+        st.success(f"✅ Others: **{oth:.1f}%**")
     else:
         st.error(f"❌ Exceeds 100% by **{-oth:.1f}%**")
 
@@ -617,7 +617,7 @@ with st.sidebar:
 st.markdown("""
 <div class="banner">
   <h1>🌿 BIOMASS PYROLYSIS DIGITAL TWIN</h1>
-  <p>Mass &amp; Energy Balance Model · Co-current of solids and gas phase during pyrolysis · Residence time 15 minutes ·Highest Treatment Temperature (HTT) 450–850 °C</p>
+  <p>Mass &amp; Energy Balance Model · Co-current of solids and gas phase during pyrolysis · Residence time 15 minutes · Highest Treatment Temperature (HTT) 450–850 °C</p>
 </div>
 """, unsafe_allow_html=True)
 
