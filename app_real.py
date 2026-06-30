@@ -592,6 +592,10 @@ with st.sidebar:
 
     if oth >= 0:
         st.success(f"✅ Others: **{oth:.1f}%**")
+        st.caption(
+            'The fraction "Others" describes components in the biomass '
+            'other than Cellulose, Hemicellulose, Lignin, and Ash (e.g., proteins).'
+        )
     else:
         st.error(f"❌ Exceeds 100% by **{-oth:.1f}%**")
 
