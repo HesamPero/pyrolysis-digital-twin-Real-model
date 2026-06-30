@@ -701,8 +701,8 @@ with e2:
     |--------|-------|
     | Biochar Chemical Energy | `{r['bc_energy']:.4f} MJ/kg` |
     | Tar Chemical Energy | `{r['tar_energy']:.4f} MJ/kg` |
-    | Gas (Chem + Sensible) | `{r['gas_chem']+r['gas_sens']:.4f} MJ/kg` |
-    | Aqueous (Cond + Sensible) | `{r['aq_cond']+r['aq_sens']:.4f} MJ/kg` |
+    | Gas (Chemical Energy + Sensible Heat) | `{r['gas_chem']+r['gas_sens']:.4f} MJ/kg` |
+    | Aqueous (Condensation + Sensible Heat) | `{r['aq_cond']+r['aq_sens']:.4f} MJ/kg` |
     | Non-recovered Losses | `{r['losses']:.4f} MJ/kg` |
     """)
 
@@ -712,7 +712,11 @@ st.markdown(
     "<div style='text-align:center;font-family:monospace;font-size:0.75rem;"
     "color:#2d6a4f;padding:10px;'>"
     "🌿 Biomass Pyrolysis Digital Twin · Built by <b>Hesam Pero</b> · Python & Streamlit<br>"
-    "Co-current of solids and gas phase during pyrolysis · Residence time: 15 minutes · Highest Treatment Temperature (HTT): 450–850 °C · Residence time 15 minutes"
+    "This digital twin is based on an empirical pyrolysis model. The
+pyrolysis experiments have been performed within the project “PyFlex -
+Pyrolysetechnologie als intersektorale Flexibilitätsmaßnahme im
+Energiesystem Deutschland” funded by the German Federal Ministry for
+Economic Affairs and Energy (BMWE) · Residence time: 15 minutes · HTT : 450–850 °C · 1 kg Biomass "
     "</div>",
     unsafe_allow_html=True,
 )
