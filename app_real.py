@@ -576,28 +576,27 @@ with st.sidebar:
     st.markdown("## ⚙️ Input Parameters")
     st.markdown("---")
     st.markdown("**Biomass Composition [wt%]**")
-
     cel  = st.slider("🌿 Cellulose",     20.0, 60.0, 54.2, 0.1)
     hemi = st.slider("🍂 Hemicellulose",  5.0, 35.0,  9.4, 0.1)
     lig  = st.slider("🪵 Lignin",         5.0, 60.0, 23.2, 0.1)
     ash  = st.slider("⚪ Ash",            0.0, 10.0,  0.4, 0.1)
-
     total = cel + hemi + lig + ash
     oth   = 100.0 - total
 
-    if oth >= 0:
+    if oth < 0:
+        st.error(f"❌ Exceeds 100% by **{-oth:.1f}%**")
+    elif oth > 17:
+        st.error(f"❌ \"Others\" = {oth:.1f}% exceeds the model's valid maximum of 17%")
+    else:
         st.success(f"✅ Others: **{oth:.1f}%**")
         st.caption(
             'The fraction "Others" describes components in the biomass '
             'other than Cellulose, Hemicellulose, Lignin, and Ash (e.g., proteins).'
         )
-    else:
-        st.error(f"❌ Exceeds 100% by **{-oth:.1f}%**")
 
     st.markdown("---")
     st.markdown("**Process Temperature**")
     HTT = st.slider("🌡️ HTT [°C]", 450, 850, 500, 10)
-
     st.markdown("---")
     st.markdown(
         "<div style='font-size:0.75rem;font-family:monospace;'>"
@@ -619,15 +618,17 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Guard
-if oth < 0:
+if oth < 0 or oth > 17:
+    if oth < 0:
+        msg = f"Component sum exceeds 100% by {-oth:.1f}%. Please reduce Cellulose, Hemicellulose, Lignin, or Ash."
+    else:
+        msg = f'"Others" = {oth:.1f}% exceeds the model\'s valid maximum of 17%. Please adjust the inputs so Others ≤ 17%.'
     st.markdown(
-        f'<div class="err-box">⚠️ Component sum exceeds 100% by {-oth:.1f}%. '
-        f'Please reduce Cellulose, Hemicellulose, Lignin, or Ash.</div>',
+        f'<div class="err-box">⚠️ {msg}</div>',
         unsafe_allow_html=True,
     )
     st.stop()
 
-# Run model
 r = run_model(cel, hemi, lig, ash, HTT)
 
 # ── Quick summary ─────────────────────────────────────────────────────────────
