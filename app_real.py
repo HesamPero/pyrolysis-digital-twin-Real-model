@@ -713,9 +713,9 @@ st.markdown(
     "color:#2d6a4f;padding:10px;'>"
     "🌿 Biomass Pyrolysis Digital Twin · Built by <b>Hesam Pero</b> · Python & Streamlit<br>"
     "This digital twin is based on an empirical pyrolysis model. The
-pyrolysis experiments have been performed within the project “PyFlex -
+pyrolysis experiments have been performed within the project PyFlex -
 Pyrolysetechnologie als intersektorale Flexibilitätsmaßnahme im
-Energiesystem Deutschland” funded by the German Federal Ministry for
+Energiesystem Deutschland funded by the German Federal Ministry for
 Economic Affairs and Energy (BMWE) · Residence time: 15 minutes · HTT : 450–850 °C · 1 kg Biomass "
     "</div>",
     unsafe_allow_html=True,
