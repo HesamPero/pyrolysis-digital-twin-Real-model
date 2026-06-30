@@ -404,12 +404,12 @@ def chart_biomass_pie(r):
 
 
 def chart_mass_sankey(r):
-    labels = [
-        'Biomass\n1.00 kg', 'Pyrolysis\nReactor',
-        f'Biochar\n{r["biochar_yield"]:.2f}%',
-        f'Tar\n{r["tar_yield"]:.2f}%',
-        f'Aqueous\n{r["aqueous_yield"]:.2f}%',
-        f'Gas\n{r["gas_yield"]:.2f}%',
+  labels = [
+        'Biomass\n1.00 kg', 'Reactor',
+        f'Biochar\n{r["biochar_yield"]/100:.2f} kg ({r["biochar_yield"]:.2f}%)',
+        f'Tar\n{r["tar_yield"]/100:.2f} kg ({r["tar_yield"]:.2f}%)',
+        f'Aqueous\n{r["aqueous_yield"]/100:.2f} kg ({r["aqueous_yield"]:.2f}%)',
+        f'Gas\n{r["gas_yield"]/100:.2f} kg ({r["gas_yield"]:.2f}%)',
     ]
     hover = [
         (f'Cellulose: {r["cel"]:.1f}%<br>Hemicellulose: {r["hemi"]:.1f}%<br>'
@@ -429,7 +429,7 @@ def chart_mass_sankey(r):
         node=dict(
             pad=8, thickness=28,
             label=labels,
-            color=[CLR['biomass'], CLR['heart'], CLR['biochar'],
+            color=[CLR['biomass'], '#c9722b', CLR['biochar'],
                    CLR['tar'], CLR['aqueous'], CLR['gas']],
             customdata=hover,
             hovertemplate='%{customdata}<extra>%{label}</extra>',
