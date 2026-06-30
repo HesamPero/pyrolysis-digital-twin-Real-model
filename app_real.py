@@ -617,7 +617,7 @@ with st.sidebar:
 st.markdown("""
 <div class="banner">
   <h1>🌿 BIOMASS PYROLYSIS DIGITAL TWIN</h1>
-  <p>Mass &amp; Energy Balance Model · 1 kg Basis · Slow Pyrolysis · HTT 450–850 °C</p>
+  <p>Mass &amp; Energy Balance Model · Co-current of solids and gas phase during pyrolysis · Residence time 15 minutes ·Highest Treatment Temperature (HTT) 450–850 °C</p>
 </div>
 """, unsafe_allow_html=True)
 
