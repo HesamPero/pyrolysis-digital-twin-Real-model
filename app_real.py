@@ -712,7 +712,7 @@ st.markdown(
     "<div style='text-align:center;font-family:monospace;font-size:0.75rem;"
     "color:#2d6a4f;padding:10px;'>"
     "🌿 Biomass Pyrolysis Digital Twin · Built by <b>Hesam Pero</b> · Python & Streamlit<br>"
-    "Slow pyrolysis · Residence time: 15 minutes · HTT range: 450–850 °C · Basis: 1 kg dry biomass"
+    "Co-current of solids and gas phase during pyrolysis · Residence time: 15 minutes · Highest Treatment Temperature (HTT): 450–850 °C · Residence time 15 minutes"
     "</div>",
     unsafe_allow_html=True,
 )
