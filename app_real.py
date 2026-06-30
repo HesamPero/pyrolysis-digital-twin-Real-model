@@ -37,7 +37,6 @@ st.markdown("""
     }
     [data-testid="stSidebar"] * { color: #1a3a1a !important; }
     [data-testid="stSidebar"] h2 { color: #2d6a4f !important; }
-
     .banner {
         background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
         padding: 18px 26px; border-radius: 12px;
@@ -47,39 +46,35 @@ st.markdown("""
                  font-size: 1.6rem; margin: 0; }
     .banner p  { color: #2e7d32; font-size: 0.82rem; margin: 5px 0 0;
                  font-family: monospace; }
-
     .metric-card {
         background: #f1f8f1; border: 1px solid #4a7c59;
         border-radius: 10px; padding: 12px 16px; text-align: center;
     }
     .metric-val { font-size: 1.5rem; font-weight: bold; font-family: monospace; }
     .metric-lbl { font-size: 0.72rem; color: #ffffff; margin-top: 3px; }
-
     .err-box {
         background: #fff0f0; border: 1px solid #ff4d4d;
         border-radius: 8px; padding: 12px 16px;
         color: #cc0000; font-weight: bold; margin-bottom: 12px;
         font-family: monospace;
     }
-
     .sec-hdr {
         font-family: monospace; font-size: 0.85rem;
         color: #2d6a4f; letter-spacing: 1px;
         border-bottom: 1px solid #4a7c59; padding-bottom: 4px;
         margin: 18px 0 10px;
     }
-
     .info-box {
         background: #f1f8f1; border: 1px solid #4a7c59;
         border-radius: 8px; padding: 10px 16px;
         font-family: monospace; font-size: 13px;
         color: #1b5e20; margin-bottom: 12px;
     }
-
-    #MainMenu, footer, header { visibility: hidden; }
+    #MainMenu, footer { visibility: hidden; }
+    header { visibility: visible !important; background-color: transparent !important; }
+    [data-testid="collapsedControl"] { display: block !important; visibility: visible !important; }
 </style>
 """, unsafe_allow_html=True)
-
 # ──────────────────────────────────────────────────────────────────────────────
 #  CONSTANTS
 # ──────────────────────────────────────────────────────────────────────────────
